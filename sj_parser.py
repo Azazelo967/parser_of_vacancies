@@ -35,7 +35,7 @@ def sj_get_location(vacancy: BeautifulSoup):
 
 
 def sj_get_link(vacancy: BeautifulSoup):
-    return vacancy.find("span", {'class': "_3FqEL _2JQOY _1dTXK _3h_V4 _1hdbq"}).find("a")["href"]
+    return "https://russia.superjob.ru"+vacancy.find("span", {'class': "_3FqEL _2JQOY _1dTXK _3h_V4 _1hdbq"}).find("a")["href"]
 
 
 def sj_get_vacancies(sj_response_page: requests.models.Response):

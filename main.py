@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, send_file
 from parsers.hh_parser import hh_get_vacancies
+from exporter import save_to_csv
 
 app = Flask("JobScrapper")
+vacancies_db = {}
 
 
 @app.route('/')
@@ -16,8 +18,27 @@ def report():
         return redirect('/')
     else:
         job.lower()
-        hh_vacancies = hh_get_vacancies(job)
+        if vacancies_db.get(job) is None:
+            hh_vacancies = hh_get_vacancies(job)
+            vacancies_db[job] = hh_vacancies
+        else:
+            hh_vacancies = vacancies_db[job]
     return render_template('report.html', job=job, resultsNumber=len(hh_vacancies), hh_vacancies=hh_vacancies)
+
+
+@app.route('/export')
+def export():
+    try:
+        keyword = request.args.get('keyword')
+        if not keyword:
+            raise Exception()
+        vacancies = vacancies_db.get(keyword)
+        if not vacancies:
+            raise Exception()
+        save_to_csv(vacancies)
+        return send_file('vacancies.csv')
+    except:
+        return redirect('/')
 
 
 app.run(host="0.0.0.0")

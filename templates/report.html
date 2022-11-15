@@ -3,10 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>JobScrapper</title>
+    <style>
+        section {
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(4, 1fr);
+        }
+    </style>
 </head>
 <body>
     <h1>Результат поиска</h1>
-    <h3>Вы искали вакансии по слову: {{job}}</h3>
-    </form>
+    <h3>Найдено {{resultsNumber}} резултатов по запросу: {{job}}</h3>
+    <section>
+        <h4>Название вакансии</h4>
+        <h4>Компания</h4>
+        <h4>Местоположение</h4>
+        <h4>Ссылка</h4>
+        {% for vacancy in hh_vacancies %}
+            <span>{{vacancy.title}}</span>
+            <span>{{vacancy.company}}</span>
+            <span>{{vacancy.location}}</span>
+            <a href = "{{vacancy.link}}" target="_blank">Перейти</a>
+        {% endfor %}
+    </section>
 </body>
 </html>

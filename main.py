@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect
+from parsers.hh_parser import hh_get_vacancies
 
 app = Flask("JobScrapper")
 
@@ -15,7 +16,8 @@ def report():
         return redirect('/')
     else:
         job.lower()
-    return render_template('report.html', job=job)
+        hh_vacancies = hh_get_vacancies(job)
+    return render_template('report.html', job=job, resultsNumber=len(hh_vacancies), hh_vacancies=hh_vacancies)
 
 
 app.run(host="0.0.0.0")
